@@ -43,11 +43,28 @@ function Home() {
         value={endDate}
         onChange={handleEndDate}
       />
-      <Button title="Nearest Fireballs" onClicked={()=>refetch()} />
+      <Button title="Nearest Fireballs" onClicked={() => refetch()} />
       <Container>
-        {data?.near_earth_objects?.map((asteroid: any) => (
-          <AsteroidCard key={asteroid?.id} {...asteroid} />
-        ))}
+        {nearestAsteroids ? (
+          Object.entries(nearestAsteroids?.near_earth_objects)?.map(
+            ([date, value]: any) => {
+              return (
+                <>
+                  <h2>Date: {date}</h2>
+                  {value?.map((asteroid: any) => (
+                    <AsteroidCard key={asteroid?.id} {...asteroid} />
+                  ))}
+                </>
+              );
+            }
+          )
+        ) : (
+          <>
+            {data?.near_earth_objects?.map((asteroid: any) => (
+              <AsteroidCard key={asteroid?.id} {...asteroid} />
+            ))}
+          </>
+        )}
       </Container>
     </>
   );
@@ -59,3 +76,4 @@ const Container = styled.div`
   display: grid;
   grid-template-columns: auto auto auto;
 `;
+
