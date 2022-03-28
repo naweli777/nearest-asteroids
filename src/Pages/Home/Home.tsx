@@ -7,7 +7,10 @@ function Home() {
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const { data: nearestAsteroids, isLoading: fetching  } = useNearestAsteroids(startDate, endDate);
+  const { data: nearestAsteroids, isLoading: fetching } = useNearestAsteroids(
+    startDate,
+    endDate
+  );
 
   const handleStartDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     setStartDate(e.target.value);
@@ -19,7 +22,7 @@ function Home() {
   return (
     <>
       <InputContainer>
-      <h4>Choose a date range: </h4>
+        <h4>Choose a date range: </h4>
 
         <Input
           type="date"
@@ -36,14 +39,17 @@ function Home() {
           onChange={handleEndDate}
         />
       </InputContainer>
-      {fetching && <h1>Loading nearest asteroids to you for the date.....</h1>}
-      {isLoading && <h1>Loading...</h1>}
-      {nearestAsteroids ? (
+      {fetching ? (
+        <LoadingText>
+          Loading nearest asteroids to you for the date.....
+        </LoadingText>
+      ) : isLoading ? (
+        <LoadingText>Loading...</LoadingText>
+      ) : nearestAsteroids ? (
         Object.entries(nearestAsteroids?.near_earth_objects)?.map(
           ([date, value]: any) => {
             return (
               <>
-                
                 <DateTitleDiv>
                   <h1>The nearest asteroid to Earth on: {date}</h1>
                 </DateTitleDiv>
@@ -56,7 +62,7 @@ function Home() {
             );
           }
         )
-      ) :(
+      ) : (
         <Container>
           {data?.near_earth_objects?.map((asteroid: any) => (
             <AsteroidCard key={asteroid?.id} {...asteroid} />
@@ -77,7 +83,10 @@ const Container = styled.div`
   place-items: center;
 
   @media (max-width: 768px) {
-    display: column;
+    grid-template-columns: 1fr 1fr;
+  }
+  @media (max-width: 428px) {
+    grid-template-columns: 1fr;
   }
 `;
 
@@ -86,25 +95,39 @@ const InputContainer = styled.div`
   display: flex;
   justify-content: center;
   padding: 50px;
-  align-items:center;
-  text-align:center;
+  align-items: center;
+  text-align: center;
+  @media (max-width: 428px) {
+    flex-direction: column;
+  }
 `;
 
 const Input = styled.input`
   padding: 5px;
   margin: 15px;
   border-radius: 10px;
-  height:50px;
+  height: 50px;
 `;
 const DateTitleDiv = styled.div`
   text-align: center;
   justify-content: center;
 
-  h1{
-    font-size:5rem;
-  color: white;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  font-weight: 400;
-  text-decoration:underline;
+  h1 {
+    font-size: 5rem;
+    color: white;
+    font-weight: 400;
+    font-family: "Nunito", sans-serif;
+    text-decoration: underline;
   }
+`;
+
+const LoadingText = styled.div`
+  justify-content: center;
+  text-align: center;
+  display: flex;
+  font-size: 5rem;
+  color: white;
+  font-weight: 400;
+  font-family: "Nunito", sans-serif;
+  top:50%;
 `;
