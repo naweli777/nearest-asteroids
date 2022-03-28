@@ -6,6 +6,7 @@ export const Container = styled.div`
   padding:10rem;
   margin:auto
   align-items:center;
+  position: relative;
 
 `
 export const Card = styled.div`
@@ -23,3 +24,14 @@ export const Card = styled.div`
     font-weight: 400;
   }
 `;
+
+export const ButtonDiv = styled.div`
+  justify-content:center;
+  margin:auto
+  align-items:center;
+  position: absolute;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+
+`

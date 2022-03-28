@@ -7,7 +7,7 @@ function Home() {
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const { data: nearestAsteroids } = useNearestAsteroids(startDate, endDate);
+  const { data: nearestAsteroids, isLoading: fetching  } = useNearestAsteroids(startDate, endDate);
 
   const handleStartDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     setStartDate(e.target.value);
@@ -36,6 +36,8 @@ function Home() {
           onChange={handleEndDate}
         />
       </InputContainer>
+      {fetching && <h1>Loading nearest asteroids to you for the date.....</h1>}
+      {isLoading && <h1>Loading...</h1>}
       {nearestAsteroids ? (
         Object.entries(nearestAsteroids?.near_earth_objects)?.map(
           ([date, value]: any) => {
@@ -54,7 +56,7 @@ function Home() {
             );
           }
         )
-      ) : (
+      ) :(
         <Container>
           {data?.near_earth_objects?.map((asteroid: any) => (
             <AsteroidCard key={asteroid?.id} {...asteroid} />
@@ -73,6 +75,10 @@ const Container = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   place-items: center;
+
+  @media (max-width: 768px) {
+    display: column;
+  }
 `;
 
 const InputContainer = styled.div`
@@ -92,7 +98,7 @@ const Input = styled.input`
 `;
 const DateTitleDiv = styled.div`
   text-align: center;
-  justifycontent: center;
+  justify-content: center;
 
   h1{
     font-size:5rem;
